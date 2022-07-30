@@ -554,7 +554,31 @@ public class Repository {
         String givenBranchHeadCommitRef = branch.getBranch().get(givenBranch);
 
         Head head = Head.load();
-        String HeadCommitRef = head.getCommitReference();
+        String headCommitRef = head.getCommitReference();
+        String br = head.getBranch();
+        Commit commit = Commit.load(headCommitRef);
+
+        List<String> stagedForRemoval = plainFilenamesIn(STAGING_FOR_REMOVAL_DIR);
+        List<String> stagedForAddition = plainFilenamesIn(STAGING_DIR);
+        List<String> untracked = getUntracked(commit);
+
+        if (!stagedForAddition.isEmpty() && !stagedForRemoval.isEmpty()) {
+            System.out.println("You have uncommitted changes.");
+            return;
+        }
+        if (!untracked.isEmpty()) {
+            System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
+            return;
+        }
+
+        if (givenBranchHeadCommitRef == null) {
+            System.out.println("A branch with that name does not exist.");
+            return;
+        }
+        if (br.equals(givenBranch)){
+            System.out.println("Cannot merge a branch with itself");
+            return;
+        }
 
         String LCA = findLCA(givenBranch);
 
@@ -566,7 +590,7 @@ public class Repository {
         /* If head commit of the current branch is the last common ancestor, then fast-forward
         the current branch.
          */
-        if (HeadCommitRef.equals(LCA)) {
+        if (headCommitRef.equals(LCA)) {
             System.out.println("Current branch fast-forwarded.");
             branchFastForward(givenBranch, head);
             return;
