@@ -1,22 +1,19 @@
 package gitlet;
 
-// TODO: any imports you need here
-
 import java.io.File;
 import java.io.Serializable;
-import java.util.Date; // TODO: You'll likely use this in this class
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
-/** Represents a gitlet commit object.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
- *
+/** Represents a gitlet commit object
+ * which contains message, timestamp, parent references in the form of sha1
+ * strings. Contains a HashMap referencing file blobs.
+ * The object is Serializable to enable saving to and loading to file.
  *  @author Daniel Michles
  */
 public class Commit implements Serializable {
     /**
-     * TODO: add instance variables here.
+     *
      *
      * List all instance variables of the Commit class here with a useful
      * comment above them describing what that variable represents and how that
@@ -26,12 +23,13 @@ public class Commit implements Serializable {
     /** The message of this Commit. */
     private String message;
     private Date timeStamp;
+    /* Key is filename, value is the file's sha1 representation of its text */
     private HashMap<String,String> map;
+    /* sha1 of the parent1 commit */
     private String parentReference;
-
+    /* sha1 of the parent2 commit */
     private String parentReference2;
 
-    /* TODO: fill in the rest of this class. */
 
     public Commit(){
         this.message = "initial commit";
@@ -39,7 +37,6 @@ public class Commit implements Serializable {
         map = new HashMap<>();
         this.parentReference = null;
     }
-
 
     public String getMessage() {
         return message;
