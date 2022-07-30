@@ -1,1 +1,1 @@
-# Berkeley CS61B git-lite Gitlet version control project 
+# Git-lite version control project based on Berkeley Data Structures and Algorithms CS61B Gitlet
