@@ -710,8 +710,9 @@ public class Repository {
         queue.add(commit);
 
         while(!queue.isEmpty()){
-            branchSet.add(commit.sha1());
             commit = queue.poll();
+            branchSet.add(commit.sha1());
+
 
             if (commit.getParentReference() != null) {
                 Commit commit1 = Commit.load(commit.getParentReference());
