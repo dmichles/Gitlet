@@ -128,6 +128,7 @@ public class Repository {
         commit.setMessage(message);
         commit.setTimeStamp(new Date());
         commit.setParentReference(head.getCommitReference());
+        commit.setParentReference2(null);
 
         /* Go through staging areas and do appropriate operations */
         commit = commitFileOps(commit);
@@ -596,8 +597,11 @@ public class Repository {
             return;
         }
 
-        condition1(LCA, givenBranch);
-        mergeCommit(givenBranch);
+        if (condition1(LCA, givenBranch)) {
+            mergeCommit(givenBranch);
+        }
+
+
     }
 
     /* Checkout the given branch, reset current branch head pointer to point to
@@ -622,7 +626,7 @@ public class Repository {
     changed in the given branch, checkout file from the given branch front commit
     and add the file to the staging area;
      */
-    public static void condition1(String LCA, String givenBranch) {
+    public static boolean condition1(String LCA, String givenBranch) {
         Head head = Head.load();
         Branch branch = Branch.load();
         Commit commitSplit = Commit.load(LCA);
@@ -633,7 +637,7 @@ public class Repository {
 
         HashMap<String, String> inSpChangedInGiven = new HashMap<>();
         HashMap<String, String> inSpNotChangedInCurr = new HashMap<>();
-        List<String> toBeCheckedOut = new ArrayList<>();
+        boolean flag = false;
 
         commitSplit.getMap().forEach((fileSp, sha1Sp) -> {
             commitGiven.getMap().forEach((fileGiven, sha1Given) -> {
@@ -651,15 +655,28 @@ public class Repository {
             });
         });
 
-        inSpChangedInGiven.forEach((fileGiven, sha1Given) -> {
+        /*inSpChangedInGiven.forEach((fileGiven, sha1Given) -> {
             inSpNotChangedInCurr.forEach((fileCurr, sha1Curr) -> {
                 if (fileGiven.equals(fileCurr)) {
                     checkoutCommit(givenCommitRef, fileGiven);
                     add(fileGiven);
                 }
             });
-        });
+        });*/
 
+        Set<String> set1 = inSpChangedInGiven.keySet();
+        Set<String> set2 = inSpNotChangedInCurr.keySet();
+
+        for(String fileGiven: set1){
+            for(String fileCurr: set2) {
+                if (fileGiven.equals(fileCurr)) {
+                    checkoutCommit(givenCommitRef, fileGiven);
+                    add(fileGiven);
+                    flag = true;
+                }
+            }
+        }
+        return flag;
     }
 
     /* Create merge commit */
