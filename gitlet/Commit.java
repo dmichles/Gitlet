@@ -36,6 +36,7 @@ public class Commit implements Serializable {
         this.timeStamp = new Date(0);
         map = new HashMap<>();
         this.parentReference = null;
+        this.parentReference2 = null;
     }
 
     public String getMessage() {
