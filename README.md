@@ -1,2 +1,2 @@
-------------------------------------------------------------------------------------------------
-# Git-lite version control project based on Berkeley Data Structures and Algorithms CS61B Gitlet
+# GITLET 
+Git-lite version control system based on UC Berkeley Data Structures and Algorithms CS61B Gitlet project
