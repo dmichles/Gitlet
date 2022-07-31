@@ -3,7 +3,7 @@ package gitlet;
 /**
  * Driver class for Gitlet, a subset of the Git version-control system.
  *
- * @author Daniel Michles
+ * @author TODO
  */
 public class Main {
 
@@ -73,6 +73,7 @@ public class Main {
                 Repository.merge(args[1]);
                 break;
             case "mergebase":
+                validateNumArgs("mergebase",args,2);
                 Repository.mergebase(args[1]);
                 break;
         }
